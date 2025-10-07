@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="card">
+    <div class="header-section">
+      <div>
+        <h2>Weather Forecast</h2>
+        <p class="subtitle">Testing API Connection</p>
+      </div>
+      <div class="health-status" *ngIf="healthStatus">
+        <span class="status-badge" [class.status-ok]="healthStatus === 'ok'">
+          {{ healthStatus === 'ok' ? '✓ API Connected' : '✗ API Error' }}
+        </span>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" (click)="refresh()" [disabled]="loading">
+      {{ loading ? 'Loading...' : 'Refresh Data' }}
+    </button>
+  </div>
+
+  <div class="error" *ngIf="error">
+    <strong>Error:</strong> {{ error }}
+  </div>
+
+  <div class="loading" *ngIf="loading && !error">
+    <div class="spinner"></div>
+    Loading weather data...
+  </div>
+
+  <div class="weather-grid" *ngIf="!loading && !error && forecasts.length > 0">
+    <div class="weather-card" *ngFor="let forecast of forecasts">
+      <div class="weather-icon">{{ getWeatherIcon(forecast.summary) }}</div>
+      <div class="weather-date">{{ forecast.date | date:'mediumDate' }}</div>
+      <div class="weather-temp">
+        <span class="temp-c">{{ forecast.temperatureC }}°C</span>
+        <span class="temp-divider">/</span>
+        <span class="temp-f">{{ getTemperatureF(forecast.temperatureC) }}°F</span>
+      </div>
+      <div class="weather-summary">{{ forecast.summary }}</div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && !error && forecasts.length === 0">
+    <p>No weather data available</p>
+  </div>
+</div>
